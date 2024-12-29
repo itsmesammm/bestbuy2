@@ -1,5 +1,6 @@
 import pytest
-from products import Product, NonStockedProduct, LimitedProduct
+from products import Product, NonStockedProduct, LimitedProduct, PercentDiscount, SecondItemHalfPrice, Buy2getThirdFree
+
 
 def test_create_valid_product():
     # Test that creating a valid product works
@@ -89,11 +90,23 @@ def test_limited_product_show():
     assert product.show() == "Shipping, Price: 10, Quantity: 250. Limited amount per order: 1"
 
 
+def test_percent_discount():
+    promotion = PercentDiscount("30% off!", percentage=30)
+    product = Product("Test Product", price=100, quantity=10)
+    discounted_price = promotion.apply_promotion(product, 2)
+    assert discounted_price == 140
 
+def test_second_half_price():
+    promotion = SecondItemHalfPrice("Second Half Price!")
+    product = Product("Test Product", price=100, quantity=10)
+    discounted_price = promotion.apply_promotion(product, 3)
+    assert discounted_price == 250
 
-
-
-
+def test_third_one_free():
+    promotion = Buy2getThirdFree("Buy 2, Get 1 Free!")
+    product = Product("Test Product", price=100, quantity=10)
+    discounted_price = promotion.apply_promotion(product, 4)
+    assert discounted_price == 300
 
 
 
