@@ -1,5 +1,5 @@
 import pytest
-from products import Product
+from products import Product, NonStockedProduct, LimitedProduct
 
 def test_create_valid_product():
     # Test that creating a valid product works
@@ -54,6 +54,44 @@ def test_buying_more_than_available_raises_exception():
     product = Product("MacBook Air M2", price=1450, quantity=1)
     with pytest.raises(ValueError, match="Not enough stock of the product."):
         product.buy(2)
+
+
+def test_nonstocked_product_creation():
+    product = NonStockedProduct("Windows License", 125)
+    assert product.name == "Windows License"
+    assert product.price == 125
+    assert product.quantity == 0
+    assert product.is_active()
+
+
+def test_nonstocked_product_set_quantity_raises_exception():
+    product = NonStockedProduct("Windows License", 125)
+    with pytest.raises(ValueError, match="Cannot set quantity for a non-stocked product."):
+        product.set_quantity(5)
+
+
+def test_limited_product_creation():
+    product = LimitedProduct("Shipping", price=10, quantity=250, max_quantity=1)
+    assert product.name == "Shipping"
+    assert product.price == 10
+    assert product.quantity == 250
+    assert product.max_quantity == 1
+
+
+def test_limited_product_over_limit():
+    product = LimitedProduct("Shipping", price=10, quantity=250, max_quantity=1)
+    with pytest.raises(ValueError, match=("Cannot get more than 1 Shipping in a single order.")):
+        product.buy(2)
+
+
+def test_limited_product_show():
+    product = LimitedProduct("Shipping", 10, quantity=250, max_quantity=1)
+    assert product.show() == "Shipping, Price: 10, Quantity: 250. Limited amount per order: 1"
+
+
+
+
+
 
 
 

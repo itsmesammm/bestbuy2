@@ -21,6 +21,7 @@ class Product:
         self.active = True
 
 
+
     def get_quantity(self):
         """
         Getter function for quantity.
@@ -96,6 +97,42 @@ class Product:
         return total_price
 
 
+class NonStockedProduct(Product):
+    """
+    Represents a non-stocked product that need no track of quantity.
+    """
+    def __init__(self, name, price):
+        super().__init__(name, price, quantity=0)
+
+    def set_quantity(self, quantity):
+        """
+        Prevent setting quantity for non-stocked products.
+        """
+        raise ValueError("Cannot set quantity for a non-stocked product.")
+
+    def show(self):
+        return f"{self.name}, Price: {self.price}, (Non-stocked product)"
+
+
+class LimitedProduct(Product):
+    """
+    Product with a purchase limit per order.
+    """
+    def __init__(self, name, price, quantity, max_quantity):
+        super().__init__(name, price, quantity)
+        self.max_quantity = max_quantity
+
+    def buy(self, quantity):
+        """
+        Prevent setting quantity for non-stocked products.
+        """
+        if quantity > self.max_quantity:
+            raise ValueError(f"Cannot get more than {self.max_quantity} {self.name} in a single order.")
+        return super().buy(quantity)
+
+
+    def show(self):
+        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}. Limited amount per order: {self.max_quantity}"
 
 
 
