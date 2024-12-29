@@ -1,4 +1,5 @@
-from products import Product
+from products import Product, NonStockedProduct, LimitedProduct
+from products import SecondItemHalfPrice, PercentDiscount, Buy2getThirdFree
 from store import Store
 
 def display_menu():
@@ -8,7 +9,7 @@ def display_menu():
     print("\tStore Menu")
     print("\t----------")
     print("1. List all products in store")
-    print("2. Show total amount in store")p
+    print("2. Show total amount in store")
     print("3. Make an order")
     print("4. Quit")
 
@@ -19,7 +20,8 @@ def list_products(store):
     if products:
         print("------")
         for i, product in enumerate(products):
-            print(f"{i+1}. {product.name}, Price: ${product.price}, Quantity: {product.quantity}")
+            product_details = product.show()
+            print(f"{i+1}. {product_details}")
         print("------")
     else:
         print("\nThere is currently no products in the store.")
@@ -92,8 +94,15 @@ def main():
         Product("Bose QuietComfort Earbuds", price=250, quantity=500),
         Product("Google Pixel 7", price=500, quantity=250),
         NonStockedProduct("Windows License", price = 125),
-        LimitedProduct("Shipping", price = 10, quantity = 250, maximum = 1)
+        LimitedProduct("Shipping", price = 10, quantity = 250, max_quantity=1)
     ]
+
+    # Assign promotions
+    product_list[0].set_promotion(SecondItemHalfPrice("Second Half Price!"))
+    product_list[1].set_promotion(Buy2getThirdFree("Buy 2, Get 1 Free!"))
+    product_list[2].set_promotion(None)  # No promotion
+    product_list[3].set_promotion(PercentDiscount("30% off!", 30))  # 30% off promotion
+    product_list[4].set_promotion(None)  # No promotion
 
     best_buy = Store(product_list)
 

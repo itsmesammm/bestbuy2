@@ -142,8 +142,8 @@ class Product:
         """
         :returns product details and promotions when apply.
         """
-        promo_text = f"Promotion of {self.promotion.name}" if {self.promotion} else""
-        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity} {promo_text}"
+        promo_text = f"Promotion: {self.promotion.name}" if self.promotion else""
+        return f"{self.name}, Price: ${self.price}, Quantity: {self.quantity} {promo_text}"
 
 
 
